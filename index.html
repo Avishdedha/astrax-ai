@@ -217,6 +217,66 @@ document.getElementById("chat").innerHTML =
 '<div class="bot">👋 New chat started. Ask me anything.</div>';
 }
 </script>
+function sendMsg() {
+let input = document.getElementById("msg");
+let text = input.value.trim();
 
+if (text === "") return;
+
+let lower = text.toLowerCase();
+let chat = document.getElementById("chat");
+
+chat.innerHTML += '<div class="user">' + text + '</div>';
+
+input.value = "";
+
+chat.innerHTML += '<div class="bot" id="typing">🤖 Astrax is thinking...</div>';
+chat.scrollTop = chat.scrollHeight;
+
+setTimeout(function () {
+
+document.getElementById("typing").remove();
+
+let reply = "🤖 I am Astrax AI. How can I help you?";
+
+if (lower.includes("hi") || lower.includes("hello")) {
+reply = "👋 Hello! Welcome to Astrax AI.";
+}
+else if (lower.includes("startup")) {
+reply = "🚀 Startup Ideas: AI Agency, SaaS Tool, E-commerce Brand.";
+}
+else if (lower.includes("coding")) {
+reply = "💻 I can help with HTML, CSS, JavaScript, Python.";
+}
+else if (lower.includes("money")) {
+reply = "💰 Earn via freelancing, business, content creation.";
+}
+else if (lower.includes("study")) {
+reply = "📚 Study tip: Focus 45 mins + 10 mins break.";
+}
+else if (lower.includes("motivation")) {
+reply = "🔥 Start now. Consistency beats talent.";
+}
+else if (lower.includes("business")) {
+reply = "📈 Solve a real problem and charge for value.";
+}
+
+chat.innerHTML += '<div class="bot">' + reply + '</div>';
+
+chat.scrollTop = chat.scrollHeight;
+
+}, 1000);
+}
+
+function newChat() {
+document.getElementById("chat").innerHTML =
+'<div class="bot">👋 New chat started. Ask me anything.</div>';
+}
+
+document.addEventListener("keydown", function(e){
+if(e.key === "Enter"){
+sendMsg();
+}
+});
 </body>
 </html>
