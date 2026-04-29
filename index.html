@@ -561,7 +561,7 @@
 
 <script>
 // ── CONFIG ── Replace with your Groq API key
-const GROQ_API_KEY = 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;
+const GROQ_API_KEY = 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
 const GROQ_MODEL = 'llama-3.3-70b-versatile';
 
 const SYSTEM_PROMPT = `You are Astrax AI — a premium intelligent assistant. Your personality: smart, honest, warm, clear, and helpful. You give precise and useful answers. You're direct but never cold. You admit uncertainty honestly. You adapt to the user's needs — detailed when needed, concise when asked. Never use excessive jargon. Always be genuinely helpful.`;
@@ -709,7 +709,8 @@ async function sendMessage() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${GROQ_API_KEY}`
+        'Authorization': `Bearer ${GROQ_API_KEY}`,
+        'Access-Control-Allow-Origin': '*'
       },
       body: JSON.stringify({
         model: GROQ_MODEL,
@@ -721,6 +722,16 @@ async function sendMessage() {
         temperature: 0.7
       })
     });
+
+    if (!res.ok) {
+      const errData = await res.json();
+      removeTyping();
+      const errMsg = errData?.error?.message || 'API error occurred.';
+      addMessage('assistant', `⚠️ Error: ${errMsg}`);
+      isTyping = false;
+      document.getElementById('send-btn').disabled = false;
+      return;
+    }
 
     const data = await res.json();
     removeTyping();
@@ -734,7 +745,7 @@ async function sendMessage() {
     }
   } catch (err) {
     removeTyping();
-    addMessage('assistant', 'Connection error. Please check your internet and API key, then try again.');
+    addMessage('assistant', '⚠️ Connection error. Make sure your API key is correct and try again.');
   }
 
   isTyping = false;
