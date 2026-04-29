@@ -179,54 +179,37 @@ display:none;
 </div>
 
 <script>
-function sendMsg(){
-let input=document.getElementById("msg");
-let text=input.value.trim().toLowerCase();
+function sendMsg() {
+let input = document.getElementById("msg");
+let text = input.value.trim();
 
-if(text==="") return;
+if (text === "") return;
 
-let chat=document.getElementById("chat");
+let lower = text.toLowerCase();
+let chat = document.getElementById("chat");
 
-chat.innerHTML += '<div class="user">'+text+'</div>';
+chat.innerHTML += '<div class="user">' + text + '</div>';
 
 let reply = "🤖 I am Astrax AI. How can I help you?";
 
-if(text.includes("hi") || text.includes("hello")){
-reply="👋 Hello! Welcome to Astrax AI.";
+if (lower.includes("hi") || lower.includes("hello")) {
+reply = "👋 Hello! Welcome to Astrax AI.";
+} 
+else if (lower.includes("startup")) {
+reply = "🚀 Startup Ideas: AI Agency, E-commerce Brand, SaaS Tool.";
 }
-else if(text.includes("startup")){
-reply="🚀 Startup Ideas: AI Agency, E-commerce Brand, SaaS Tool.";
+else if (lower.includes("coding")) {
+reply = "💻 I can help with HTML, CSS, JavaScript and more.";
 }
-else if(text.includes("coding")){
-reply="💻 I can help with HTML, CSS, JavaScript and more.";
-}
-else if(text.includes("who are you")){
-reply="🤖 I am Astrax AI, your smart assistant.";
-}
-else if(text.includes("money")){
-reply="💰 You can earn through freelancing, business, content creation.";
+else if (lower.includes("money")) {
+reply = "💰 You can earn through freelancing, business, or content creation.";
 }
 
-chat.innerHTML += '<div class="bot">'+reply+'</div>';
+chat.innerHTML += '<div class="bot">' + reply + '</div>';
 
 chat.scrollTop = chat.scrollHeight;
 
-input.value="";
-}
-let input=document.getElementById("msg");
-let text=input.value.trim();
-
-if(text==="") return;
-
-let chat=document.getElementById("chat");
-
-chat.innerHTML += '<div class="user">'+text+'</div>';
-
-chat.innerHTML += '<div class="bot">🤖 Astrax is thinking...</div>';
-
-chat.scrollTop = chat.scrollHeight;
-
-input.value="";
+input.value = "";
 }
 
 function newChat(){
