@@ -16,131 +16,191 @@ font-family:Arial, sans-serif;
 body{
 background:#050505;
 color:white;
-text-align:center;
 }
 
-header{
+.container{
+display:flex;
+height:100vh;
+}
+
+/* Sidebar */
+.sidebar{
+width:250px;
+background:#0d0d0d;
 padding:20px;
+border-right:1px solid #222;
+}
+
+.logo{
 font-size:28px;
 font-weight:bold;
 color:#00ffcc;
-letter-spacing:2px;
-}
-
-.hero{
-padding:100px 20px;
-}
-
-.hero h1{
-font-size:60px;
 margin-bottom:20px;
 }
 
-.hero p{
-font-size:22px;
-color:#aaa;
-margin-bottom:35px;
-}
-
-button{
-padding:15px 35px;
-font-size:18px;
-border:none;
-border-radius:10px;
+.newchat{
+width:100%;
+padding:14px;
 background:#00ff99;
-cursor:pointer;
+border:none;
+border-radius:12px;
 font-weight:bold;
-transition:0.3s;
+cursor:pointer;
+margin-bottom:25px;
 }
 
-button:hover{
-transform:scale(1.05);
-background:#00cc77;
-}
-
-.features{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:20px;
-padding:50px 30px;
-}
-
-.card{
-background:#111;
-padding:25px;
-border-radius:14px;
-box-shadow:0 0 10px rgba(0,255,150,0.15);
-}
-
-.card h3{
+.recent{
+color:#777;
+font-size:14px;
 margin-bottom:10px;
+}
+
+.chatitem{
+background:#111;
+padding:12px;
+border-radius:10px;
+margin-bottom:10px;
+font-size:14px;
+}
+
+/* Main */
+.main{
+flex:1;
+display:flex;
+flex-direction:column;
+}
+
+.topbar{
+padding:20px;
+border-bottom:1px solid #222;
+font-size:26px;
+font-weight:bold;
 color:#00ffcc;
 }
 
-footer{
-padding:30px;
-color:#666;
-font-size:14px;
+.messages{
+flex:1;
+padding:25px;
+overflow:auto;
+}
+
+.bot{
+background:#111;
+padding:14px;
+border-radius:14px;
+max-width:700px;
+margin-bottom:15px;
+line-height:1.5;
+}
+
+.user{
+background:#00ff99;
+color:black;
+padding:14px;
+border-radius:14px;
+max-width:500px;
+margin-left:auto;
+margin-bottom:15px;
+font-weight:bold;
+}
+
+.inputbox{
+display:flex;
+gap:10px;
+padding:20px;
+border-top:1px solid #222;
+}
+
+input{
+flex:1;
+padding:16px;
+background:#111;
+color:white;
+border:none;
+border-radius:12px;
+font-size:16px;
+outline:none;
+}
+
+button{
+padding:16px 24px;
+background:#00ff99;
+border:none;
+border-radius:12px;
+font-weight:bold;
+cursor:pointer;
+}
+
+button:hover{
+opacity:0.9;
+}
+
+@media(max-width:800px){
+.sidebar{
+display:none;
+}
 }
 </style>
 </head>
 
 <body>
 
-<header>ASTRAX AI</header>
+<div class="container">
 
-<section class="hero">
-<h1>The Future is Here 🚀</h1>
-<p>Smart • Honest • Powerful AI Assistant</p>
-<button onclick="openChat()">Start Chat</button>
-</section>
+<div class="sidebar">
+<div class="logo">ASTRAX</div>
 
-<section class="features">
+<button class="newchat" onclick="newChat()">+ New Chat</button>
 
-<div class="card">
-<h3>⚡ Prompt Enhance</h3>
-<p>Turns weak prompts into smart prompts.</p>
+<div class="recent">Recent Chats</div>
+
+<div class="chatitem">Startup ideas</div>
+<div class="chatitem">How to earn online?</div>
+<div class="chatitem">Best coding laptop</div>
+
 </div>
 
-<div class="card">
-<h3>🧠 Quick / Deep</h3>
-<p>Get fast or detailed answers instantly.</p>
+<div class="main">
+
+<div class="topbar">ASTRAX CHAT</div>
+
+<div class="messages" id="chat">
+
+<div class="bot">👋 Hello! I’m Astrax AI. Ask me anything.</div>
+
 </div>
 
-<div class="card">
-<h3>🎙 Voice Mode</h3>
-<p>Speak and hear responses instantly.</p>
+<div class="inputbox">
+<input type="text" id="msg" placeholder="Message Astrax...">
+<button onclick="sendMsg()">Send</button>
 </div>
 
-<div class="card">
-<h3>🔁 Reverify</h3>
-<p>Recheck answers for better accuracy.</p>
+</div>
 </div>
 
-</section>
-
-<footer>
-© 2026 Astrax AI
-</footer>
 <script>
-function openChat() {
-document.body.innerHTML = `
-<div style="background:black; color:white; height:100vh; padding:30px; font-family:Arial;">
-<h1 style="color:#00ffcc;">ASTRAX CHAT</h1>
+function sendMsg(){
+let input=document.getElementById("msg");
+let text=input.value.trim();
 
-<div style="margin-top:30px; background:#111; padding:15px; border-radius:10px;">
-Hello! I am Astrax AI. How can I help you today?
-</div>
+if(text==="") return;
 
-<input type="text" placeholder="Type your message..."
-style="width:70%; padding:15px; margin-top:30px; border:none; border-radius:10px;">
+let chat=document.getElementById("chat");
 
-<button style="padding:15px 20px; margin-left:10px; background:#00ff99; border:none; border-radius:10px;">
-Send
-</button>
-</div>
-`;
+chat.innerHTML += '<div class="user">'+text+'</div>';
+
+chat.innerHTML += '<div class="bot">🤖 Astrax is thinking...</div>';
+
+chat.scrollTop = chat.scrollHeight;
+
+input.value="";
+}
+
+function newChat(){
+document.getElementById("chat").innerHTML =
+'<div class="bot">👋 New chat started. Ask me anything.</div>';
 }
 </script>
+
 </body>
 </html>
