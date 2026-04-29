@@ -92,7 +92,7 @@ font-size:14px;
 <section class="hero">
 <h1>The Future is Here 🚀</h1>
 <p>Smart • Honest • Powerful AI Assistant</p>
-<button>Start Chat</button>
+<button onclick="openChat()">Start Chat</button>
 </section>
 
 <section class="features">
@@ -122,6 +122,25 @@ font-size:14px;
 <footer>
 © 2026 Astrax AI
 </footer>
+<script>
+function openChat() {
+document.body.innerHTML = `
+<div style="background:black; color:white; height:100vh; padding:30px; font-family:Arial;">
+<h1 style="color:#00ffcc;">ASTRAX CHAT</h1>
 
+<div style="margin-top:30px; background:#111; padding:15px; border-radius:10px;">
+Hello! I am Astrax AI. How can I help you today?
+</div>
+
+<input type="text" placeholder="Type your message..."
+style="width:70%; padding:15px; margin-top:30px; border:none; border-radius:10px;">
+
+<button style="padding:15px 20px; margin-left:10px; background:#00ff99; border:none; border-radius:10px;">
+Send
+</button>
+</div>
+`;
+}
+</script>
 </body>
 </html>
