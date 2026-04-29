@@ -560,9 +560,9 @@
 </div>
 
 <script>
-// ── CONFIG ── Replace with your Groq API key
-const GROQ_API_KEY = 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
-const GROQ_MODEL = 'llama-3.3-70b-versatile';
+// ── CONFIG ── Replace with your Gemini API key
+const GEMINI_API_KEY = gen-lang-client-0045870791
+const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
 
 const SYSTEM_PROMPT = `You are Astrax AI — a premium intelligent assistant. Your personality: smart, honest, warm, clear, and helpful. You give precise and useful answers. You're direct but never cold. You admit uncertainty honestly. You adapt to the user's needs — detailed when needed, concise when asked. Never use excessive jargon. Always be genuinely helpful.`;
 
@@ -705,21 +705,27 @@ async function sendMessage() {
     : ' Be concise and clear. Get to the point.';
 
   try {
-    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    // Build conversation history for Gemini
+    const geminiMessages = messages.slice(0, -1).map(m => ({
+      role: m.role === 'assistant' ? 'model' : 'user',
+      parts: [{ text: m.content }]
+    }));
+
+    // Add current user message
+    geminiMessages.push({
+      role: 'user',
+      parts: [{ text: SYSTEM_PROMPT + modeInstruction + '\n\nUser: ' + text }]
+    });
+
+    const res = await fetch(GEMINI_URL, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${GROQ_API_KEY}`,
-        'Access-Control-Allow-Origin': '*'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model: GROQ_MODEL,
-        messages: [
-          { role: 'system', content: SYSTEM_PROMPT + modeInstruction },
-          ...messages
-        ],
-        max_tokens: chatMode === 'deep' ? 1500 : 600,
-        temperature: 0.7
+        contents: geminiMessages,
+        generationConfig: {
+          maxOutputTokens: chatMode === 'deep' ? 1500 : 600,
+          temperature: 0.7
+        }
       })
     });
 
@@ -736,12 +742,12 @@ async function sendMessage() {
     const data = await res.json();
     removeTyping();
 
-    if (data.choices && data.choices[0]) {
-      const reply = data.choices[0].message.content;
+    const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (reply) {
       messages.push({ role: 'assistant', content: reply });
       addMessage('assistant', reply);
     } else {
-      addMessage('assistant', 'Something went wrong. Please check your API key and try again.');
+      addMessage('assistant', 'Something went wrong. Please try again.');
     }
   } catch (err) {
     removeTyping();
