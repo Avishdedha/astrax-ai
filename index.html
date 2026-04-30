@@ -397,6 +397,35 @@
   }
   .quick-prompt:hover { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
 
+  /* API Key Modal */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; z-index: 999;
+    background: rgba(14,12,10,0.8); backdrop-filter: blur(4px);
+    align-items: center; justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--warm-white); border-radius: 20px; padding: 32px;
+    max-width: 440px; width: 90%; border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+  }
+  .modal-title { font-family: 'Cormorant Garamond', serif; font-size: 24px; margin-bottom: 8px; }
+  .modal-desc { font-size: 14px; color: var(--text-secondary); margin-bottom: 20px; line-height: 1.6; }
+  .modal-input {
+    width: 100%; padding: 14px 16px; border-radius: 12px;
+    border: 1px solid var(--border); background: var(--cream);
+    font-family: 'DM Sans', sans-serif; font-size: 14px;
+    color: var(--text-primary); margin-bottom: 16px; outline: none;
+    transition: border-color 0.2s;
+  }
+  .modal-input:focus { border-color: var(--gold); }
+  .modal-actions { display: flex; gap: 12px; justify-content: flex-end; }
+
+  .api-key-status {
+    font-size: 11px; color: var(--text-muted); margin-top: 6px;
+  }
+
   /* Animations */
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(24px); }
@@ -450,7 +479,7 @@
     <p class="hero-sub">Smart. Honest. Helpful AI for everyday life — built to make you think better, solve faster, and achieve more.</p>
     <div class="hero-cta">
       <button class="btn-primary btn-lg" onclick="openChat()">Start Chat →</button>
-      <button class="btn-outline btn-lg" id="about" onclick="document.querySelector('.features').scrollIntoView({behavior:'smooth'})">Learn More</button>
+      <button class="btn-outline btn-lg" onclick="document.querySelector('.features').scrollIntoView({behavior:'smooth'})">Learn More</button>
     </div>
   </section>
 
@@ -554,22 +583,40 @@
         <button class="send-btn" id="send-btn" onclick="sendMessage()">➤</button>
       </div>
       <div class="input-hint">Press Enter to send · Shift+Enter for new line</div>
+      <div class="api-key-status" id="api-status"></div>
     </div>
   </div>
 
 </div>
 
+<!-- ── API KEY MODAL ── -->
+<div class="modal-overlay" id="api-modal">
+  <div class="modal">
+    <div class="modal-title">⚡ Enter Your Gemini API Key</div>
+    <div class="modal-desc">
+      Get your free API key from <strong>Google AI Studio</strong> (aistudio.google.com).<br>
+      Your key is stored locally in your browser — never shared.
+    </div>
+    <input class="modal-input" id="api-key-input" type="password" placeholder="Paste your Gemini API key here...">
+    <div class="modal-actions">
+      <button class="btn-outline" onclick="closeApiModal()">Cancel</button>
+      <button class="btn-primary" onclick="saveApiKey()">Save Key</button>
+    </div>
+  </div>
+</div>
+
 <script>
-// ── CONFIG ── Replace with your Gemini API key
-const GEMINI_API_KEY = gen-lang-client-0045870791
-const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+// ── CONFIG ──
+const GEMINI_API_KEY = 'AIzaSyCkaSokJ7AdNTUL9rYoXUdwPEWwtL7_Xcg';
+const GEMINI_MODEL = 'gemini-2.0-flash';
+const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
 
 const SYSTEM_PROMPT = `You are Astrax AI — a premium intelligent assistant. Your personality: smart, honest, warm, clear, and helpful. You give precise and useful answers. You're direct but never cold. You admit uncertainty honestly. You adapt to the user's needs — detailed when needed, concise when asked. Never use excessive jargon. Always be genuinely helpful.`;
 
 let chatMode = 'quick';
-let messages = [];
+let messages = []; // Full conversation history
 let isTyping = false;
-let chatSessions = [];
+let savedSessions = [];
 
 // ── THEME ──
 let isDark = false;
@@ -584,6 +631,10 @@ function openChat() {
   document.getElementById('home-page').style.display = 'none';
   const chatPage = document.getElementById('chat-page');
   chatPage.classList.add('open');
+  
+  // Check API key
+  updateApiStatus();
+  
   document.getElementById('chat-input').focus();
 }
 
@@ -592,172 +643,29 @@ function closeChat() {
   document.getElementById('home-page').style.display = 'block';
 }
 
-// ── MODE ──
-function setMode(mode) {
-  chatMode = mode;
-  document.getElementById('quick-mode').classList.toggle('active', mode === 'quick');
-  document.getElementById('deep-mode').classList.toggle('active', mode === 'deep');
+// ── API KEY ──
+function updateApiStatus() {
+  const status = document.getElementById('api-status');
+  status.textContent = '🔑 API key configured';
+  status.style.color = '#28CA41';
 }
 
-// ── NEW CHAT ──
-function newChat() {
-  if (messages.length > 0) {
-    const preview = messages[0]?.content?.substring(0, 30) + '...' || 'Chat';
-    const histItem = document.createElement('div');
-    histItem.className = 'chat-history-item';
-    histItem.textContent = preview;
-    histItem.onclick = () => {};
-    document.getElementById('chat-history').appendChild(histItem);
+function openApiModal() {
+  const existing = localStorage.getItem('astrax_api_key');
+  if (existing) {
+    document.getElementById('api-key-input').value = existing;
   }
-  messages = [];
-  document.getElementById('messages-container').innerHTML = '';
-  document.getElementById('messages-container').style.display = 'none';
-  document.getElementById('welcome-screen').style.display = 'flex';
+  document.getElementById('api-modal').classList.add('open');
 }
 
-// ── QUICK PROMPTS ──
-function usePrompt(text) {
-  document.getElementById('chat-input').value = text;
-  document.getElementById('chat-input').focus();
+function closeApiModal() {
+  document.getElementById('api-modal').classList.remove('open');
 }
 
-// ── CHAT LOGIC ──
-function handleKey(e) {
-  if (e.key === 'Enter' && !e.shiftKey) {
-    e.preventDefault();
-    sendMessage();
-  }
-}
-
-function autoResize(el) {
-  el.style.height = 'auto';
-  el.style.height = Math.min(el.scrollHeight, 140) + 'px';
-}
-
-function addMessage(role, content) {
-  const container = document.getElementById('messages-container');
-  const welcome = document.getElementById('welcome-screen');
-
-  if (welcome.style.display !== 'none') {
-    welcome.style.display = 'none';
-    container.style.display = 'flex';
-  }
-
-  const div = document.createElement('div');
-  div.className = `chat-msg ${role === 'user' ? 'user-msg' : ''} fade-in`;
-
-  const isAI = role === 'assistant';
-  div.innerHTML = `
-    <div class="chat-avatar ${isAI ? 'ai-av' : 'usr-av'}">${isAI ? 'A' : 'U'}</div>
-    <div class="chat-bubble ${isAI ? 'ai-bubble' : 'user-bubble'}">${content.replace(/\n/g, '<br>')}</div>
-  `;
-
-  container.appendChild(div);
-  container.scrollTop = container.scrollHeight;
-  return div;
-}
-
-function showTyping() {
-  const container = document.getElementById('messages-container');
-  const welcome = document.getElementById('welcome-screen');
-  if (welcome.style.display !== 'none') {
-    welcome.style.display = 'none';
-    container.style.display = 'flex';
-  }
-  const div = document.createElement('div');
-  div.className = 'chat-msg fade-in';
-  div.id = 'typing-indicator';
-  div.innerHTML = `
-    <div class="chat-avatar ai-av">A</div>
-    <div class="chat-bubble ai-bubble">
-      <div class="typing-indicator">
-        <div class="typing-dot"></div>
-        <div class="typing-dot"></div>
-        <div class="typing-dot"></div>
-      </div>
-    </div>
-  `;
-  container.appendChild(div);
-  container.scrollTop = container.scrollHeight;
-}
-
-function removeTyping() {
-  const el = document.getElementById('typing-indicator');
-  if (el) el.remove();
-}
-
-async function sendMessage() {
-  const input = document.getElementById('chat-input');
-  const text = input.value.trim();
-  if (!text || isTyping) return;
-
-  isTyping = true;
-  document.getElementById('send-btn').disabled = true;
-  input.value = '';
-  input.style.height = 'auto';
-
-  messages.push({ role: 'user', content: text });
-  addMessage('user', text);
-  showTyping();
-
-  const modeInstruction = chatMode === 'deep'
-    ? ' Give a detailed, comprehensive, expert-level answer.'
-    : ' Be concise and clear. Get to the point.';
-
-  try {
-    // Build conversation history for Gemini
-    const geminiMessages = messages.slice(0, -1).map(m => ({
-      role: m.role === 'assistant' ? 'model' : 'user',
-      parts: [{ text: m.content }]
-    }));
-
-    // Add current user message
-    geminiMessages.push({
-      role: 'user',
-      parts: [{ text: SYSTEM_PROMPT + modeInstruction + '\n\nUser: ' + text }]
-    });
-
-    const res = await fetch(GEMINI_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: geminiMessages,
-        generationConfig: {
-          maxOutputTokens: chatMode === 'deep' ? 1500 : 600,
-          temperature: 0.7
-        }
-      })
-    });
-
-    if (!res.ok) {
-      const errData = await res.json();
-      removeTyping();
-      const errMsg = errData?.error?.message || 'API error occurred.';
-      addMessage('assistant', `⚠️ Error: ${errMsg}`);
-      isTyping = false;
-      document.getElementById('send-btn').disabled = false;
-      return;
-    }
-
-    const data = await res.json();
-    removeTyping();
-
-    const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-    if (reply) {
-      messages.push({ role: 'assistant', content: reply });
-      addMessage('assistant', reply);
-    } else {
-      addMessage('assistant', 'Something went wrong. Please try again.');
-    }
-  } catch (err) {
-    removeTyping();
-    addMessage('assistant', '⚠️ Connection error. Make sure your API key is correct and try again.');
-  }
-
-  isTyping = false;
-  document.getElementById('send-btn').disabled = false;
-  input.focus();
-}
-</script>
-</body>
-</html>
+function saveApiKey() {
+  const key = document.getElementById('api-key-input').value.trim();
+  if (key) {
+    localStorage.setItem('astrax_api_key', key);
+    closeApiModal();
+    updateApiStatus();
+    alert('✅
