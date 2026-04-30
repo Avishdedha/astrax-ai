@@ -87,7 +87,6 @@
     transition: all 0.25s;
   }
   .btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(201,168,76,0.4); }
-
   .hero {
     min-height: 100vh; display: flex; flex-direction: column;
     align-items: center; justify-content: center;
@@ -132,7 +131,6 @@
   }
   .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
   .btn-lg { padding: 14px 36px; font-size: 15px; }
-
   .features { padding: 80px 48px; display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; animation: fadeUp 0.8s 0.4s ease both; }
   .feature-card {
     flex: 1; min-width: 200px; max-width: 260px;
@@ -144,7 +142,6 @@
   .feature-icon { font-size: 28px; margin-bottom: 16px; }
   .feature-title { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 500; margin-bottom: 8px; }
   .feature-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
-
   .preview-section { padding: 40px 48px 100px; display: flex; justify-content: center; }
   .chat-preview {
     width: 100%; max-width: 680px; border-radius: 24px; overflow: hidden;
@@ -176,17 +173,14 @@
   .msg-bubble.ai { background: var(--cream); border: 1px solid var(--border); border-radius: 4px 16px 16px 16px; }
   [data-theme="dark"] .msg-bubble.ai { background: var(--dark3); }
   .msg-bubble.user-b { background: var(--gold); color: #0E0C0A; border-radius: 16px 4px 16px 16px; }
-
   footer {
     padding: 32px 48px; border-top: 1px solid var(--border);
     display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
   }
   .footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 500; color: var(--text-muted); }
   .footer-text { font-size: 13px; color: var(--text-muted); }
-
   #chat-page { display: none; position: fixed; inset: 0; z-index: 200; background: var(--cream); flex-direction: row; }
   #chat-page.open { display: flex; }
-
   .sidebar {
     width: 260px; flex-shrink: 0; background: var(--warm-white);
     border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 0;
@@ -219,7 +213,6 @@
     font-weight: 500; letter-spacing: 0.03em;
   }
   .mode-btn.active, .mode-btn:hover { background: var(--gold); color: #0E0C0A; border-color: var(--gold); }
-
   .chat-main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
   .chat-topbar {
     padding: 16px 28px; border-bottom: 1px solid var(--border);
@@ -233,7 +226,6 @@
     font-size: 13px; color: var(--text-secondary); transition: all 0.2s;
   }
   .back-btn:hover { border-color: var(--gold); color: var(--gold); }
-
   .messages-area {
     flex: 1; overflow-y: auto; padding: 32px 48px;
     display: flex; flex-direction: column; gap: 24px; scroll-behavior: smooth;
@@ -247,7 +239,6 @@
   .chat-avatar.ai-av { background: var(--gold-dim); border: 1px solid var(--border); color: var(--gold); font-family: 'Cormorant Garamond', serif; font-weight: 600; }
   .chat-avatar.usr-av { background: var(--dark2); color: #F0EBE3; font-size: 13px; }
   [data-theme="dark"] .chat-avatar.usr-av { background: var(--gold); color: var(--dark); }
-
   .chat-bubble {
     padding: 14px 20px; border-radius: 20px;
     max-width: 70%; font-size: 15px; line-height: 1.7; color: var(--text-primary);
@@ -255,7 +246,6 @@
   .chat-bubble.ai-bubble { background: var(--warm-white); border: 1px solid var(--border); border-radius: 4px 20px 20px 20px; }
   [data-theme="dark"] .chat-bubble.ai-bubble { background: var(--dark3); }
   .chat-bubble.user-bubble { background: var(--gold); color: #0E0C0A; border-radius: 20px 4px 20px 20px; }
-
   .typing-indicator { display: flex; gap: 5px; padding: 14px 20px; }
   .typing-dot {
     width: 7px; height: 7px; border-radius: 50%; background: var(--gold);
@@ -264,7 +254,6 @@
   .typing-dot:nth-child(2) { animation-delay: 0.2s; }
   .typing-dot:nth-child(3) { animation-delay: 0.4s; }
   @keyframes typingBounce { 0%,80%,100%{transform:translateY(0);opacity:0.4} 40%{transform:translateY(-6px);opacity:1} }
-
   .input-area { padding: 20px 48px 28px; border-top: 1px solid var(--border); background: var(--warm-white); }
   .input-wrapper {
     display: flex; align-items: flex-end; gap: 12px;
@@ -274,14 +263,12 @@
   }
   .input-wrapper:focus-within { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,0.1); }
   [data-theme="dark"] .input-wrapper { background: var(--dark3); }
-
   #chat-input {
     flex: 1; background: transparent; border: none; outline: none;
     font-family: 'DM Sans', sans-serif; font-size: 15px;
     color: var(--text-primary); resize: none; max-height: 140px; line-height: 1.5;
   }
   #chat-input::placeholder { color: var(--text-muted); }
-
   .send-btn {
     width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0;
     background: var(--gold); border: none; cursor: pointer;
@@ -290,9 +277,7 @@
   }
   .send-btn:hover { background: var(--gold-light); transform: scale(1.05); }
   .send-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
-
   .input-hint { font-size: 12px; color: var(--text-muted); margin-top: 10px; text-align: center; }
-
   .welcome-screen {
     flex: 1; display: flex; flex-direction: column;
     align-items: center; justify-content: center; padding: 40px; text-align: center;
@@ -300,7 +285,6 @@
   .welcome-icon { font-size: 48px; margin-bottom: 24px; opacity: 0.8; }
   .welcome-title { font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 300; margin-bottom: 12px; }
   .welcome-sub { font-size: 15px; color: var(--text-secondary); max-width: 400px; line-height: 1.6; }
-
   .quick-prompts { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 32px; }
   .quick-prompt {
     padding: 10px 18px; border-radius: 100px;
@@ -308,17 +292,14 @@
     font-size: 13px; color: var(--text-secondary); cursor: pointer; transition: all 0.2s;
   }
   .quick-prompt:hover { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
-
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(24px); }
     to { opacity: 1; transform: translateY(0); }
   }
   .fade-in { animation: fadeUp 0.4s ease both; }
-
   ::-webkit-scrollbar { width: 4px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-
   @media (max-width: 768px) {
     nav { padding: 16px 20px; }
     .nav-links { display: none; }
@@ -343,7 +324,6 @@
       <button class="btn-primary" onclick="openChat()">Start Chat</button>
     </div>
   </nav>
-
   <section class="hero">
     <div class="hero-bg"></div>
     <div class="hero-tag">✦ Next-Generation AI Assistant</div>
@@ -354,13 +334,11 @@
       <button class="btn-outline btn-lg" onclick="document.querySelector('.features').scrollIntoView({behavior:'smooth'})">Learn More</button>
     </div>
   </section>
-
   <section class="features">
     <div class="feature-card"><div class="feature-icon">⚡</div><div class="feature-title">Instant</div><div class="feature-desc">Lightning-fast responses that keep up with your thinking. No waiting, no lag.</div></div>
     <div class="feature-card"><div class="feature-icon">◎</div><div class="feature-title">Accurate</div><div class="feature-desc">Built-in reverification ensures honest, reliable answers you can trust.</div></div>
     <div class="feature-card"><div class="feature-icon">✦</div><div class="feature-title">Elegant</div><div class="feature-desc">Premium experience designed for focus — clean, minimal, distraction-free.</div></div>
   </section>
-
   <section class="preview-section">
     <div class="chat-preview">
       <div class="preview-header"><div class="preview-dots"><span></span><span></span><span></span></div><div class="preview-title">Astrax AI — Chat</div></div>
@@ -371,7 +349,6 @@
       </div>
     </div>
   </section>
-
   <footer><div class="footer-logo">Astrax AI</div><div class="footer-text">Built for humans who want more.</div><div class="footer-text">© 2025 Astrax</div></footer>
 </div>
 
@@ -385,7 +362,6 @@
       <button class="mode-btn" id="deep-mode" onclick="setMode('deep')">◎ Deep</button>
     </div>
   </div>
-
   <div class="chat-main">
     <div class="chat-topbar"><div class="chat-title">✦ Astrax AI</div><button class="back-btn" onclick="closeChat()">← Back to Home</button></div>
     <div id="messages-container" class="messages-area" style="display:none;"></div>
@@ -411,9 +387,8 @@
 </div>
 
 <script>
-const API_KEY = AIzaSyBg-srQgeMZclxQoGG3wPPQIbTIO7br1lA
+const API_KEY = 'AIzaSyCkaSokJ7AdNTUL9rYoXUdwPEWwtL7_Xcg';
 const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + API_KEY;
-
 const SYSTEM_PROMPT = "You are Astrax AI — a premium intelligent assistant. Smart, honest, warm, clear, and helpful. You give precise answers. You're direct but never cold. You admit uncertainty honestly.";
 
 let chatMode = 'quick';
@@ -469,7 +444,6 @@ function addMessage(role, content) {
   const container = document.getElementById('messages-container');
   const welcome = document.getElementById('welcome-screen');
   if (welcome.style.display !== 'none') { welcome.style.display = 'none'; container.style.display = 'flex'; }
-
   const div = document.createElement('div');
   div.className = 'chat-msg ' + (role === 'user' ? 'user-msg' : '') + ' fade-in';
   const isAI = role === 'assistant';
@@ -535,8 +509,8 @@ async function sendMessage() {
 
     if (!res.ok) {
       const errData = await res.json();
-      const errorMsg = '❌ Error: ' + (errData?.error?.message || 'Check your API key or internet connection.');
-      addMessage('assistant', errorMsg);
+      const errMsg = '❌ Error: ' + (errData?.error?.message || 'API key invalid or quota exceeded. Get a new key from https://aistudio.google.com/apikey');
+      addMessage('assistant', errMsg);
       isTyping = false;
       document.getElementById('send-btn').disabled = false;
       return;
@@ -548,12 +522,11 @@ async function sendMessage() {
       messages.push({ role: 'assistant', content: reply });
       addMessage('assistant', reply);
     } else {
-      addMessage('assistant', '⚠️ Something went wrong. No response received. Try again.');
+      addMessage('assistant', 'Something went wrong. No response received.');
     }
   } catch (err) {
-    console.error('Send error:', err);
     removeTyping();
-    addMessage('assistant', '❌ Connection error. Check your internet and verify your Gemini API key is valid.');
+    addMessage('assistant', '❌ Connection error. Check your internet connection.');
   }
 
   isTyping = false;
